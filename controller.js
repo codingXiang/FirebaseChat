@@ -10,7 +10,7 @@ app.controller("ChatController", function($scope) {
     /*  這裡用來讀取 Firebase 中的聊天訊息 */
     var chatData = firebase.database().ref('chats');
     chatData.on('value', function(snapshot) {
-        angular.element(document.getElementById('test')).scope().chatMessages = []
+        $scope.chatMessages = []
         for (i in snapshot.val()) {
             firebase.database().ref('chats/' + i).once('value', function(result) {
                 var data = result.val()
@@ -23,17 +23,16 @@ app.controller("ChatController", function($scope) {
     });
 
     // 聊天訊息的格式
-    $scope.formatChat = function(username, text, origDt) {
-            console.log(origDt)
+    $scope.formatChat = function(username, text, time) {
             var chat = {};
             chat.username = username;
             chat.text = text;
-            chat.time = origDt;
+            chat.time = time;
             return chat;
         }
         // 新增聊天訊息到 html 當中
-    $scope.addMessage = function(username, text, date) {
-            var chat = $scope.formatChat(username, text, new Date(date));
+    $scope.addMessage = function(username, text, time) {
+            var chat = $scope.formatChat(username, text, new Date(time));
             $scope.chatMessages.push(chat)
         }
         // 新增訊息到 Firebase 當中
@@ -45,7 +44,6 @@ app.controller("ChatController", function($scope) {
             alert("請輸入完整訊息！")
         }
     }
-
 });
 
 app.filter('reverse', function() {

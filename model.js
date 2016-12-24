@@ -10,6 +10,7 @@ firebase.initializeApp(config);
 
 // 將聊天資料上傳至 Firebase 當中
 function sendMessage(username, message, date) {
+    // 設定上傳資料格式
     var postData = {
         sender: username,
         message: message,
@@ -17,10 +18,10 @@ function sendMessage(username, message, date) {
     };
 
     // 取得亂數 key
-    var newPostKey = firebase.database().ref().child('posts').push().key;
+    var newMessageKey = firebase.database().ref().push().key;
 
     var updates = {};
-    updates['/chats/' + newPostKey] = postData;
+    updates['/chats/' + newMessageKey] = postData;
 
     return firebase.database().ref().update(updates);
 }
